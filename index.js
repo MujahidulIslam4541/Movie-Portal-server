@@ -29,6 +29,13 @@ async function run() {
     // const movies = database.collection("movies");
 
     const MoviesConnection = client.db("Movies_Portal").collection("Movies");
+    const favoritesMovies = client.db("Movies_Portal").collection("favorite_movie");
+
+    app.post("/movies", async (req, res) => {
+      const AddMovies = req.body;
+      const result = await favoritesMovies.insertOne(AddMovies);
+      res.send(result);
+    });
 
     app.post("/movies", async (req, res) => {
       const AddMovies = req.body;
