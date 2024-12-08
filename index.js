@@ -78,6 +78,30 @@ async function run() {
       res.send(result);
     });
 
+    app.put("/movies/:id", async (req, res) => {
+      const id = req.params.id;
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: true };
+      const updateMovie = req.body;
+      const updatedMovie = {
+        $set: {
+          title: updateMovie.tittle,
+          duration: updateMovie.duration,
+          genre: updateMovie.genre,
+          rating: updateMovie.rating,
+          release: updateMovie.release,
+          textarea: updateMovie.textarea,
+          photo: updateMovie.photo,
+        },
+      };
+      const result = await MoviesConnection.updateOne(
+        filter,
+        updatedMovie,
+        options
+      );
+      res.send(result);
+    });
+
     app.delete("/movies/:id", async (req, res) => {
       const id = req.params.id;
       const quarry = { _id: new ObjectId(id) };
