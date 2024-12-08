@@ -29,18 +29,32 @@ async function run() {
     // const movies = database.collection("movies");
 
     const MoviesConnection = client.db("Movies_Portal").collection("Movies");
-    const favoritesMovies = client.db("Movies_Portal").collection("favorite_movie");
+    const favoritesMovies = client
+      .db("Movies_Portal")
+      .collection("favorite_movie");
 
     app.post("/favorite", async (req, res) => {
       const favoriteMovies = req.body;
       const result = await favoritesMovies.insertOne(favoriteMovies);
       res.send(result);
     });
+
     app.get("/favorite", async (req, res) => {
       const cursor = favoritesMovies.find();
       const result = await cursor.toArray(cursor);
       res.send(result);
     });
+
+    app.get("/favorite/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const quarry = { _id: new ObjectId(id) };
+      const result = await favoritesMovies.findOne(quarry);
+      res.send(result);
+    });
+
+
+
 
     app.post("/movies", async (req, res) => {
       const AddMovies = req.body;
