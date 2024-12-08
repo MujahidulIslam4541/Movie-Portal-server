@@ -33,64 +33,57 @@ async function run() {
       .db("Movies_Portal")
       .collection("favorite_movie");
 
-    // app.post("/favorite", async (req, res) => {
-    //   const favoriteMovies = req.body;
-    //   const result = await favoritesMovies.insertOne(favoriteMovies);
-    //   res.send(result);
-    // });
-
-    // app.get("/favorite", async (req, res) => {
-    //   const cursor = favoritesMovies.find();
-    //   const result = await cursor.toArray(cursor);
-    //   res.send(result);
-    // });
-
-    app.get("/favorites/:id", async (req, res) => {
-      const id = req.params.id;
-      console.log(id);
-      const quarry = { _id: new ObjectId(id) };
-      console.log(quarry);
-      const result = await favoritesMovies.find(quarry);
-      console.log(result);
+    app.post("/favorite", async (req, res) => {
+      const favoriteMovies = req.body;
+      const result = await favoritesMovies.insertOne(favoriteMovies);
       res.send(result);
     });
 
-    // app.delete("/favorite/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const quarry = { _id: new ObjectId(id) };
-    //   const result = await favoritesMovies.deleteOne(quarry);
-    //   res.send(result);
-    // });
+    app.get("/favorite", async (req, res) => {
+      const cursor = favoritesMovies.find();
+      const result = await cursor.toArray(cursor);
+      res.send(result);
+    });
 
+    app.get("/favorite/:id", async (req, res) => {
+      console.log(req.params.id);
+      const cursor = await favoritesMovies.findOne({ _id: req.params.id });
+      res.send(cursor);
+    });
 
+    app.delete("/favorite/:id", async (req, res) => {
+      const id = req.params.id;
+      const quarry = { _id: id };
+      const result = await favoritesMovies.deleteOne(quarry);
+      res.send(result);
+    });
 
+    app.post("/movies", async (req, res) => {
+      const AddMovies = req.body;
+      const result = await MoviesConnection.insertOne(AddMovies);
+      res.send(result);
+    });
 
-    // app.post("/movies", async (req, res) => {
-    //   const AddMovies = req.body;
-    //   const result = await MoviesConnection.insertOne(AddMovies);
-    //   res.send(result);
-    // });
+    app.get("/movies", async (req, res) => {
+      const cursor = MoviesConnection.find();
+      const result = await cursor.toArray(cursor);
+      res.send(result);
+    });
 
-    // app.get("/movies", async (req, res) => {
-    //   const cursor = MoviesConnection.find();
-    //   const result = await cursor.toArray(cursor);
-    //   res.send(result);
-    // });
+    app.get("/movies/:id", async (req, res) => {
+      const id = req.params.id;
+      console.log(id);
+      const quarry = { _id: new ObjectId(id) };
+      const result = await MoviesConnection.findOne(quarry);
+      res.send(result);
+    });
 
-    // app.get("/movies/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   console.log(id);
-    //   const quarry = { _id: new ObjectId(id) };
-    //   const result = await MoviesConnection.findOne(quarry);
-    //   res.send(result);
-    // });
-
-    // app.delete("/movies/:id", async (req, res) => {
-    //   const id = req.params.id;
-    //   const quarry = { _id: new ObjectId(id) };
-    //   const result = await MoviesConnection.deleteOne(quarry);
-    //   res.send(result);
-    // });
+    app.delete("/movies/:id", async (req, res) => {
+      const id = req.params.id;
+      const quarry = { _id: new ObjectId(id) };
+      const result = await MoviesConnection.deleteOne(quarry);
+      res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     // await client.db("admin").command({ ping: 1 });
