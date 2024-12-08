@@ -1,6 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
-require("dotenv").config();
+
 const cors = require("cors");
 const port = process.env.PROT || 5000;
 const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
@@ -85,7 +86,7 @@ async function run() {
       const updateMovie = req.body;
       const updatedMovie = {
         $set: {
-          title: updateMovie.tittle,
+          title: updateMovie.title,
           duration: updateMovie.duration,
           genre: updateMovie.genre,
           rating: updateMovie.rating,
