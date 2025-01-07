@@ -10,7 +10,7 @@ const { MongoClient, ServerApiVersion, ObjectId } = require("mongodb");
 app.use(express.json());
 app.use(cors());
 
-const uri = `mongodb+srv://${process.env.USER_NAME}:${process.env.USER_PASSWORD}@cluster0.oo75q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.oo75q.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -66,7 +66,15 @@ async function run() {
     });
 
     app.get("/movies", async (req, res) => {
-      const cursor = MoviesConnection.find();
+      let query = {};
+      const search = req.query?.search;
+      const sort = req.query?.sort;
+      let sortedQuery = {};
+      if (sort) sortedQuery = { sort: { rating: sort === "asc" ? 1 : -1 } };
+      if (search) {
+        query.title = { $regex: search, $options: "i" };
+      }
+      const cursor = MoviesConnection.find(query,sortedQuery);
       const result = await cursor.toArray(cursor);
       res.send(result);
     });
